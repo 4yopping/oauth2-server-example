@@ -1,0 +1,27 @@
+{
+  "name": "oauth2-server-example",
+  "version": "0.0.1",
+  "description": "Example of OAuth2 Server",
+  "main": "server.js",
+  "scripts": {
+    "test": "mocha test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/markotom/oauth2-server-example"
+  },
+  "author": "Marco Godínez <markotom@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/markotom/oauth2-server-example/issues"
+  },
+  "homepage": "https://github.com/markotom/oauth2-server-example",
+  "devDependencies": {
+    "supertest": "^0.15.0"
+  },
+  "dependencies": {
+    "joi": "^5.1.0",
+    "oauth2-server": "^2.3.0",
+    "restify": "^2.8.5",
+    "vogels": "^2.0.0-rc8"
+  }
+}
