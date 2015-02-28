@@ -4,11 +4,10 @@ var vogels = require('../lib/vogels'),
 var OAuthUser = vogels.define('OAuthUser', {
   hashKey: 'email',
   schema: {
-    username: joi.string(),
+    email: joi.string(),
     password: joi.string(),
     firstname: joi.string(),
-    lastname: joi.string(),
-    email: joi.string()
+    lastname: joi.string()
   }
 });
 

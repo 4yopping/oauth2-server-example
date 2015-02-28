@@ -1,39 +1,40 @@
-var restify = require('restify'),
+var express = require('express'),
     oauth = require('./lib/oauth'),
-    server = restify.createServer({
-      name: 'OAuth Server',
-      version: '1.0.0'
-    });
+    server = express();
 
 // Middlewares
-server.use(restify.bodyParser());
-server.use(restify.urlEncodedBodyParser({ mapParams : false }));
-server.pre(function (req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'X-Requested-With');
-  res.header('Access-Control-Allow-Methods', '*');
+var bodyParser = require('body-parser'),
+    logger = require('morgan');
 
-  return next();
-});
+// Conf
+server.set('port', process.env.PORT || 3000);
 
-// Route [./]
-server.get('/', function (req, res) {
-  res.send(200, {
+// Middlewares
+server.use(bodyParser.urlencoded({ extended: true }));
+server.use(bodyParser.json());
+server.use(logger('dev'));
+
+// Route [GET /]
+server.get('/', function (req, res, next) {
+  res.status(200).send({
     name: server.name,
     version: server.versions
   });
 });
 
-// Route [./oauth/token]
+// Route [POST /oauth/token]
 server.post('/oauth/token', oauth.grant());
+
+// Route [GET /gold]
+server.get('/gold', oauth.authorise(), function (req, res) {
+  res.status(200).send({});
+});
 
 // Listen
 if (!module.parent) {
-  server.listen(process.env.PORT || 3000, function () {
-    console.log('%s listening at %s', server.name, server.url);
+  server.listen(server.get('port'), function () {
+    console.log('Server listening at %s', server.get('port'));
   });
 }
-
-server.use(oauth.errorHandler());
 
 module.exports = server;

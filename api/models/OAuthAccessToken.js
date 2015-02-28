@@ -2,7 +2,7 @@ var vogels = require('../lib/vogels'),
     joi    = require('joi');
 
 var OAuthAccessToken = vogels.define('OAuthAccessToken', {
-  hashKey: 'clientId',
+  hashKey: 'accessToken',
   schema: {
     accessToken: joi.string(),
     clientId: joi.string(),

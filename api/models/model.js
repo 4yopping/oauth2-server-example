@@ -18,16 +18,66 @@ vogels.createTables({
 });
 
 
-module.exports.getAccessToken = function (bearerToken, callback) {};
+// Get Access Token
+module.exports.getAccessToken = function (bearerToken, callback) {
+  OAuthAccessToken.get({ accessToken: bearerToken }, function (err, data) {
+    if (err || !data) {
+      return callback(err, data);
+    }
 
-module.exports.getClient = function (clientId, clientSecret, callback) {};
+    data.attrs.expires = new Date(data.expires * 1000);
 
-module.exports.grantTypeAllowed = function (clientId, grantType, callback) {};
+    callback(err, data);
+  });
+};
 
-module.exports.saveAccessToken = function (token, clientId, expires, userId, callback) {};
+// Get Client
+module.exports.getClient = function (clientId, clientSecret, callback) {
+  OAuthClient.get({ clientId: clientId }, function (err, data) {
+    if (err || !data) {
+      return callback(err, data);
+    }
 
-module.exports.getUser = function (username, password, callback) {};
+    if (data.attrs.clientSecret !== clientSecret) {
+      return callback();
+    }
 
-module.exports.saveRefreshToken = function (token, clientId, expires, userId, callback) {};
+    callback(null, data);
+  });
+};
 
-module.exports.getRefreshToken = function (refreshToken, callback) {};
+// Grant Type Allowed
+var authorizedClientIds = ['1234567890'];
+module.exports.grantTypeAllowed = function (clientId, grantType, callback) {
+  if (grantType === 'password') {
+    return callback(false, authorizedClientIds.indexOf(clientId) >= 0);
+  }
+
+  callback(false, true);
+};
+
+// Save Access Token
+module.exports.saveAccessToken = function (accessToken, clientId, expires, user, callback) {
+  var token = {
+    accessToken: accessToken,
+    clientId: clientId,
+    userId: user.id
+  };
+
+  if (expires) {
+    token.expires = parseInt(expires / 1000, 10);
+  }
+
+  OAuthAccessToken.create(token, callback);
+};
+
+// Get User
+module.exports.getUser = function (username, password, callback) {
+  OAuthUser.get({ email: username }, function (err, data) {
+    if (err) {
+      return callback(err);
+    }
+
+    callback(null, { id: "email:" + data.attrs.email });
+  });
+};
