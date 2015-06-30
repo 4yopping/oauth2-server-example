@@ -1,0 +1,1 @@
+{"name":"Oauth2-Server. Example","tagline":"","body":"\r\n## Packages\r\n\r\n* [Express](http://expressjs.com)\r\n* [Node OAuth2 Server](https://github.com/thomseddon/node-oauth2-server)\r\n* [Vogels](https://github.com/ryanfitz/vogels) (Amazon DynamoDB ORM)\r\n","google":"","note":"Don't delete this file! It's used internally to help with page regeneration."}
